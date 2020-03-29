@@ -31,7 +31,7 @@ The script Zappi2PVOutput.org should be downloaded and run from a local device o
 The script has been tested with Powershell 5, but doesn't depend on any particularly exotic features of Powershell so should have good compatibility with other supported versions.
 
 ### Configuring the Windows Powershell environment
-By default, the Windows PowerShell execution policy is set to 'Restricted' which means scripts cannot be run! To check your execution policy, run the 'Get-ExecutionPolicy' cmdlet from a Windows PowerShell prompt.
+By default, the Windows PowerShell execution policy is set to `Restricted` which means scripts cannot be run! To check your execution policy, run the `Get-ExecutionPolicy` cmdlet from a Windows PowerShell prompt.
 
 To weaken the Windows Powershell execution policy to allow scripts you have written yourself to run, along with downloaded scripts that have been signed by a trusted publisher, open a Windows PowerShell prompt as an Administrator and run `Set-ExecutionPolicy RemoteSigned`. However you should first run `Get-Help About_Signing` to determine whether this execution policy meets your security requirements.
 
