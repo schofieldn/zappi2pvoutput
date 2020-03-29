@@ -1,13 +1,13 @@
-﻿# Zappi2PVOutput.ps1 v1.0
+﻿# Zappi2PVOutput.ps1 v1.1
 # Last updated 29/03/2020
 # Written by Neil Schofield (neil.schofield@sky.com)
 #
-# This powershell script takes status data stored on MyEnergi servers for their
+# This powershell script takes status data stored on myenergi servers for their
 # Zappi EV charger customers and uploads it to PVOutput.org,  a free service for
 # sharing, comparing and monitoring live solar photovoltaic (PV) and energy
 # consumption data.
 #
-# *** Important Note: It reiles on API calls to MyEnergi web services which are
+# *** Important Note: It reiles on API calls to myenergi web services which are
 # UNSUPOORTED, UNDOCUMENTED, and may stop working without notice.
 #
 # Thanks to the many members of the myenergi.info forum for their insights,
