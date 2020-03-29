@@ -54,7 +54,13 @@
 # ==============================================================================
 
     $ErrorActionPreference = "Stop"
-
+    
+    # If the log file doesn't exist create a blank one:
+    if (!(Test-Path -Path $UploadLog))
+    {
+        Add-Content $UploadLog "$(Get-Date -format g) No previous log file found in this location. Creating new one ..."
+    }
+    
     if ($GetOWMTempData)
     {
         $Uri = New-Object System.Uri ("https://api.openweathermap.org/data/2.5/weather?units=metric&id=$OWMLocationID&appid=$OWMApiKey")
