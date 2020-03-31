@@ -132,7 +132,7 @@
     # Check the data returned is current:
     if ($ZappiDateTime -lt (Get-Date).AddMinutes(-10))
     {
-        Add-Content $UploadLog "$(Get-Date -format g) Zappi status data is not current ($ZappiDateTime). Aborting ..."
+        Add-Content $UploadLog "$(Get-Date -format g) Zappi status data is not current - $($ZappiDateTime.ToString()). Aborting ..."
         exit
     }
     
@@ -160,5 +160,5 @@
     }
     else
     {
-        Add-Content $UploadLog "$(Get-Date -format g) Status data for $ZappiDateTime has already been uploaded"
+        Add-Content $UploadLog "$(Get-Date -format g) Status data for $($ZappiDateTime.ToString()) has already been uploaded"
     }
