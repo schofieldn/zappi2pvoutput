@@ -1,4 +1,4 @@
-﻿# Zappi2PVOutput.ps1 v1.1
+﻿# Zappi2PVOutput.ps1 v1.2
 # Last updated 29/03/2020
 # Written by Neil Schofield (neil.schofield@sky.com)
 #
@@ -74,7 +74,7 @@
         }
         catch
         {
-            Add-Content $UploadLog "$(Get-Date -format g) Getting weather information from $Uri failed. Continuing ..."
+            Add-Content $UploadLog "$(Get-Date -format g) Getting weather information from $Uri failed: $($Error[0]). Continuing ..."
         }
     }
 
@@ -90,7 +90,7 @@
     }
     catch
     {
-        Add-Content $UploadLog "$(Get-Date -format g) Getting Zappi status information from $Uri failed. Aborting ..."
+        Add-Content $UploadLog "$(Get-Date -format g) Getting Zappi status information from $Uri failed: $($Error[0]). Aborting ..."
         exit
     }
              
@@ -155,7 +155,7 @@
         }
         catch
         {
-            Add-Content $UploadLog "$(Get-Date -format g) Uploading status data for $($ZappiDateTime.ToString()) failed: Consumed Power = $($PVORequestBody.v4)W, Temperature = $($PVORequestBody.v5) deg C, Supply Voltage = $($PVORequestBody.v6)V - $($Error[0])."
+            Add-Content $UploadLog "$(Get-Date -format g) Uploading status data for $($ZappiDateTime.ToString()) failed: Consumed Power = $($PVORequestBody.v4)W, Temperature = $($PVORequestBody.v5) deg C, Supply Voltage = $($PVORequestBody.v6)V: $($Error[0])."
         }
     }
     else
