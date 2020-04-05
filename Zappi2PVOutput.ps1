@@ -8,7 +8,7 @@
 # consumption data.
 #
 # *** Important Note: It reiles on API calls to myenergi web services which are
-# UNSUPOORTED, UNDOCUMENTED, and may stop working without notice.
+# UNSUPPORTED, UNDOCUMENTED, and may stop working without notice.
 #
 # Thanks to the many members of the myenergi.info forum for their insights,
 # especially twonk for his work (https://github.com/twonk/MyEnergi-App-Api)
