@@ -141,7 +141,7 @@
     $PVORequestBody.v4 = $PowerUsed.ToString()
 
     # Supply voltage is part of the data returned and is optional information to be uploaded, so include it:
-    $PVORequestBody.v6 = $ZappiStatus.zappi.vol.ToString()
+    $PVORequestBody.v6 = ($ZappiStatus.zappi.vol/10).ToString()
 
     # First check we haven't uploaded a status with this timestamp before
     if (-not (select-string -Pattern "Uploading status data for $($ZappiDateTime.ToString()) succeeded" -Path $UploadLog))
