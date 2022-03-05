@@ -28,7 +28,7 @@ This information is collated and power consumption figures are derived. Optional
 The script Zappi2PVOutput.org should be downloaded and run from a local device on your Windows system. Internet access is required, but the volume of data transferred is relatively small.
 
 ## Software Requirements
-The script has been tested with Powershell 5, but doesn't depend on any particularly exotic features of Powershell so should have good compatibility with other supported versions.
+The script has been tested with Powershell 7.2, and some arguments passed to the invoke-webrequest cmdlet require a minimum of Powershell 7.
 
 ### Configuring the Windows Powershell environment
 By default, the Windows PowerShell execution policy is set to `Restricted` which means scripts cannot be run! To check your execution policy, run the `Get-ExecutionPolicy` cmdlet from a Windows PowerShell prompt.
@@ -41,11 +41,11 @@ Because the `Zappi2PVOutput.ps1` script has not been signed by a trusted publish
 There are no parameters that can be passed to the script, but at the top of the script are a number of variables which must be modified to suit your individual environment.
 
 ### Your PVOutput.org system ID and API key (`$PVOSystemId` and `$PVOApiKey`)
-You will first need to register with PVOutput.org and create a system which will have a unique ID. You will also need to enable API access in the [account settings](http://www.pvoutput.org/account.jsp) page and generate your API key.
+You will first need to register with PVOutput.org and create a system which will have a unique ID. You will also need to enable API access in the [account settings](https://www.pvoutput.org/account.jsp) page and generate your API key.
 
 Depending on how frequently you wish to upload status information to PVOutput.org, you may wish to reconfigure the [Status Interval](https://pvoutput.org/help.html#live-settings-status-interval) for your system.
 
-For more details refer to [http://www.pvoutput.org/help.html](http://www.pvoutput.org/help.html)
+For more details refer to [http://www.pvoutput.org/help.html](https://www.pvoutput.org/help.html)
 
 ### Your myenergi app account credentials (`$MyEnergiUName` and `$MyEnergiPW`)
 Your myenergi app username is the serial number of your hub device and is typically a string of 8 digits. The password will have been set when you first registered it in the myenergi app.
@@ -69,4 +69,4 @@ If this functionality is required, register on the openweathermap.org site and o
 
 The script is intended to be run periodically at a frequency determined by the status interval configured for the system on PVOutput.org - eg every 5 minutes. Scheduling functionality is not part of the script. As an example, the Windows Task Scheduler provides a very capable method for providing this. In this case, the scheduled action would look something like:
 
-`powershell.exe -command "& \"C:\Users\Bob\Downloads\Zappi2PVOutput.ps1\""`
+`pwsh.exe -command "& \"C:\Users\Bob\Downloads\Zappi2PVOutput.ps1\""`
