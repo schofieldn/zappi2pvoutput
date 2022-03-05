@@ -1,5 +1,5 @@
-﻿# Zappi2PVOutput.ps1 v1.2
-# Last updated 29/03/2020
+# Zappi2PVOutput.ps1 v1.3
+# Last updated 05/03/2022
 # Written by Neil Schofield (neil.schofield@sky.com)
 #
 # This powershell script takes status data stored on myenergi servers for their
@@ -14,7 +14,7 @@
 # especially twonk for his work (https://github.com/twonk/MyEnergi-App-Api)
 # which forms the basis of this script.
 #
-# The script has been tested with Powershell v5
+# The script has been tested with Powershell v7.2
 #
 # SYNTAX:
 # .\Zappi2PVOutput.ps1
@@ -49,6 +49,8 @@
        
     $PVORequestHeaders = @{"X-Pvoutput-SystemID"=$PVOSystemId;"X-Pvoutput-Apikey"=$PVOApiKey}
     $PVORequestBody = @{}
+    
+    $MEDirectorURL = "https://director.myenergi.net"
 
 # End of values
 # ==============================================================================
@@ -78,10 +80,36 @@
         }
     }
 
-    # MyEnergi server name is determined by last digit of the MyEnergi *hub* serial number
-    $Uri = New-Object System.Uri ("https://s" + $MyEnergiUName[$MyEnergiUName.Length - 1] + ".myenergi.net/cgi-jstatus-Z" + $ZappiSerial + "/")
+    # MyEnergi server name WAS previously determined by last digit of the MyEnergi *hub* serial number
+    # $Uri = New-Object System.Uri ("https://s" + $MyEnergiUName[$MyEnergiUName.Length - 1] + ".myenergi.net/cgi-jstatus-Z" + $ZappiSerial + "/")
+    # NOW it's provided by a call to the Director URL
     $SecPW = ConvertTo-SecureString $MyEnergiPW -AsPlainText -Force 
     $SecCred = New-Object System.Management.Automation.PSCredential ($MyEnergiUName, $SecPW)
+    $Uri = New-Object System.Uri ($MEDirectorURL)
+    
+    try
+    {
+        # Call to the MyEnergi director to obtain the ASN information
+        # Note the response will be a 401 error, so we have to ignore HTTP errors
+        $Response = Invoke-WebRequest -Uri $Uri.AbsoluteUri -Credential $SecCred -OutFile $MEResponseLog -PassThru -SkipHttpErrorCheck
+    }
+    catch
+    {
+        Add-Content $UploadLog "$(Get-Date -format g) Getting ASN details from $Uri failed: $($Error[0]). Aborting ..."
+        exit
+    }
+
+    # Validate we've got ASN in the response headers
+    if ($null -eq $Response.Headers.'X_MYENERGI-asn')
+    {
+        Add-Content $UploadLog "$(Get-Date -format g) Failed to get ASN response headers from $Uri. Aborting..."
+        exit
+    }
+    else {
+        $MyASN = $Response.Headers.'X_MYENERGI-asn'
+        $Uri = New-Object System.Uri ("https://$MyASN/cgi-jstatus-*")
+    }
+    
     try
     {
         # Get the current Zappi status info from the appropriate myenergi.net server
@@ -93,7 +121,7 @@
         Add-Content $UploadLog "$(Get-Date -format g) Getting Zappi status information from $Uri failed: $($Error[0]). Aborting ..."
         exit
     }
-             
+ 
     # Validate Zappi status data
     if ($ZappiStatus.zappi.sno -ne $ZappiSerial)
     {
