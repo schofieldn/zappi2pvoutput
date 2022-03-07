@@ -1,5 +1,5 @@
-# Zappi2PVOutput.ps1 v1.3
-# Last updated 05/03/2022
+# Zappi2PVOutput.ps1 v1.4
+# Last updated 07/03/2022
 # Written by Neil Schofield (neil.schofield@sky.com)
 #
 # This powershell script takes status data stored on myenergi servers for their
@@ -130,17 +130,22 @@
     }
     
     # Zero values are not returned from the myenergi web service calls, so we assume missing values are zero
-    if ($null -eq $ZappiStatus.zappi.gen)
+    $PowerGen = 0
+    if ($null -ne $ZappiStatus.zappi.gen)
     {
-        $ZappiStatus.zappi.gen = 0
+        $PowerGen = $ZappiStatus.zappi.gen
     }
-    if ($null -eq $ZappiStatus.zappi.grd)
+
+    $PowerGrd = 0
+    if ($null -ne $ZappiStatus.zappi.grd)
     {
-        $ZappiStatus.zappi.grd = 0
+        $PowerGrd = $ZappiStatus.zappi.grd
     }
-    if ($null -eq $ZappiStatus.zappi.vol)
+
+    $SupplyVol = 0
+    if ($null -ne $ZappiStatus.zappi.vol)
     {
-        $ZappiStatus.zappi.vol = 0
+        $SupplyVol = $ZappiStatus.zappi.vol
     }
 
     try
@@ -164,12 +169,12 @@
         exit
     }
     
-    # Current power being consumed is the sum of what is being generated and what is being drawn from the grid. NB: grd value can be negative.
-    $PowerUsed = $ZappiStatus.zappi.gen + $ZappiStatus.zappi.grd
+    # Current power being consumed is the sum of what is being generated and what is being drawn from the grid. NB: grid value can be negative.
+    $PowerUsed = $PowerGen + $PowerGrd
     $PVORequestBody.v4 = $PowerUsed.ToString()
 
-    # Supply voltage is part of the data returned and is optional information to be uploaded, so include it:
-    $PVORequestBody.v6 = ($ZappiStatus.zappi.vol/10).ToString()
+    # Supply voltage (in decivolts) is part of the data returned and is optional information to be uploaded, so include it:
+    $PVORequestBody.v6 = ($SupplyVol/10).ToString()
 
     # First check we haven't uploaded a status with this timestamp before
     if (-not (select-string -Pattern "Uploading status data for $($ZappiDateTime.ToString()) succeeded" -Path $UploadLog))
